@@ -1,0 +1,143 @@
+[
+  {
+    "model": "catalog.product",
+    "pk": 1,
+    "fields": {
+      "name": "Wooden Dining Table",
+      "description": "Beautiful wooden dining table suitable for 6 persons.",
+      "image_preview": "wooden_dining_table.jpg",
+      "category": "Furniture",
+      "price_per_unit": 599,
+      "creation_date": "2024-02-13",
+      "last_modified_date": "2024-02-13"
+    }
+  },
+  {
+    "model": "catalog.product",
+    "pk": 2,
+    "fields": {
+      "name": "Leather Sofa",
+      "description": "Comfortable leather sofa with reclining seats.",
+      "image_preview": "leather_sofa.jpg",
+      "category": "Furniture",
+      "price_per_unit": 1299,
+      "creation_date": "2024-02-13",
+      "last_modified_date": "2024-02-13"
+    }
+  },
+  {
+    "model": "catalog.product",
+    "pk": 3,
+    "fields": {
+      "name": "LED Smart TV",
+      "description": "55-inch LED Smart TV with Ultra HD resolution.",
+      "image_preview": "led_smart_tv.jpg",
+      "category": "Electronics",
+      "price_per_unit": 1499,
+      "creation_date": "2024-02-13",
+      "last_modified_date": "2024-02-13"
+    }
+  },
+  {
+    "model": "catalog.product",
+    "pk": 4,
+    "fields": {
+      "name": "Queen Bed",
+      "description": "Elegant queen-sized bed with upholstered headboard.",
+      "image_preview": "queen_bed.jpg",
+      "category": "Furniture",
+      "price_per_unit": 899,
+      "creation_date": "2024-02-13",
+      "last_modified_date": "2024-02-13"
+    }
+  },
+  {
+    "model": "catalog.product",
+    "pk": 5,
+    "fields": {
+      "name": "Kitchen Mixer",
+      "description": "High-performance kitchen mixer with multiple attachments.",
+      "image_preview": "kitchen_mixer.jpg",
+      "category": "Appliances",
+      "price_per_unit": 199,
+      "creation_date": "2024-02-13",
+      "last_modified_date": "2024-02-13"
+    }
+  },
+  {
+    "model": "catalog.product",
+    "pk": 6,
+    "fields": {
+      "name": "Laptop",
+      "description": "Thin and lightweight laptop with powerful performance.",
+      "image_preview": "laptop.jpg",
+      "category": "Electronics",
+      "price_per_unit": 1199,
+      "creation_date": "2024-02-13",
+      "last_modified_date": "2024-02-13"
+    }
+  },
+  {
+    "model": "catalog.product",
+    "pk": 7,
+    "fields": {
+      "name": "Coffee Table",
+      "description": "Modern coffee table with tempered glass top.",
+      "image_preview": "coffee_table.jpg",
+      "category": "Furniture",
+      "price_per_unit": 299,
+      "creation_date": "2024-02-13",
+      "last_modified_date": "2024-02-13"
+    }
+  },
+  {
+    "model": "catalog.product",
+    "pk": 8,
+    "fields": {
+      "name": "Washing Machine",
+      "description": "Front-loading washing machine with energy-efficient features.",
+      "image_preview": "washing_machine.jpg",
+      "category": "Appliances",
+      "price_per_unit": 799,
+      "creation_date": "2024-02-13",
+      "last_modified_date": "2024-02-13"
+    }
+  },
+  {
+    "model": "catalog.product",
+    "pk": 9,
+    "fields": {
+      "name": "Desk Chair",
+      "description": "Ergonomic desk chair with adjustable armrests.",
+      "image_preview": "desk_chair.jpg",
+      "category": "Furniture",
+      "price_per_unit": 199,
+      "creation_date": "2024-02-13",
+      "last_modified_date": "2024-02-13"
+    }
+  },
+  {
+    "model": "catalog.category",
+    "pk": 1,
+    "fields": {
+      "name": "Furniture",
+      "description": "Category for furniture items."
+    }
+  },
+  {
+    "model": "catalog.category",
+    "pk": 2,
+    "fields": {
+      "name": "Electronics",
+      "description": "Category for electronic devices."
+    }
+  },
+  {
+    "model": "catalog.category",
+    "pk": 3,
+    "fields": {
+      "name": "Appliances",
+      "description": "Category for home appliances."
+    }
+  }
+]
