@@ -1,0 +1,82 @@
+.product-card {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    max-width: 300px; /* Adjust as needed */
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    overflow: hidden;
+    margin-bottom: 20px;
+}
+
+.product-image {
+    width: 100%;
+    padding-top: 100%; /* Aspect ratio 1:1 (square) */
+    position: relative;
+    overflow: hidden;
+}
+
+.product-image img {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* Maintain aspect ratio while covering the area */
+}
+
+.product-info {
+    padding: 15px;
+    background: #f7f8ff;
+}
+
+.product-title {
+    font-size: 18px;
+    margin-bottom: 10px;
+    display: -webkit-box;
+    -webkit-line-clamp: 1;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.product-description {
+    margin-bottom: 5px;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.product-actions {
+    margin-top: 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.product-old-price {
+    font-size: 16px;
+    color: #6c757d;
+    text-decoration: line-through;
+    margin-top: 5px;
+}
+
+.product-discount {
+    font-weight: bold;
+    font-size: 26px;
+    color: #00c906;
+    margin-top: 5px;
+}
+
+.icon-cart-button {
+    /* Добавляем фоновое изображение */
+    background-repeat: no-repeat; /* Отключаем повторение изображения */
+    background-position: center; /* Расположение изображения по центру слева */
+    background-size: 32px; /* Размер изображения */
+    border: none; /* Убираем границу кнопки */
+    padding: 19px 22px; /* Отступы внутри кнопки */
+    cursor: pointer; /* Курсор при наведении */
+    background-image: url('/media/icons/cart.png');
+}

@@ -6,14 +6,19 @@ NULLABLE = {'null' : True, 'blank' : True}
 class Product(models.Model):
     name = models.CharField(max_length=50, verbose_name='name')
     description = models.TextField(max_length=250, verbose_name='description')
-    image_preview = models.ImageField(upload_to='product_images/', verbose_name='image', **NULLABLE)
+    image_preview = models.ImageField(upload_to='products/', verbose_name='image', **NULLABLE)
     category = models.CharField(max_length=50, verbose_name='сategory')
     price_per_unit = models.PositiveIntegerField(verbose_name='price')
     creation_date = models.DateField(auto_now_add=True, verbose_name='creation date')
     last_modified_date = models.DateField(auto_now=True, verbose_name='last modified date')
 
     def __str__(self):
-        return self.name
+        return str(self.name)
+
+    def get_image_url(self):
+        if self.image_preview:
+            return f"products/{self.image_preview}"
+        return ''
 
     class Meta:
         verbose_name = 'Product'

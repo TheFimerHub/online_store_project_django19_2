@@ -1,0 +1,54 @@
+{% extends 'catalog/base.html' %}
+{% load mediapath_tag %}
+{% load static %}
+
+{% block content %}
+<div class="col-lg-6 mx-auto">
+    <div class="card mb-4 box-shadow">
+        <div class="card-header">
+            <h4 class="my-0 font-weight-normal">Создайте собственный товар</h4>
+        </div>
+        <div class="card-body">
+            <form method="post" action="" class="form-floating" enctype="multipart/form-data">
+                {% csrf_token %}
+                <div class="mb-3">
+                    <label for="name">Название продукта</label>
+                    <input type="text" name="name" class="form-control" id="name" placeholder="Ваш продукт..." required>
+                </div>
+                <div class="mb-3">
+                    <label for="description">Опишите ваш продукт</label>
+                    <input type="text" name="description" class="form-control" id="description"
+                           placeholder="Этот продукт нужен для..." required>
+                </div>
+                <div class="mb-3">
+                    <label for="image">Выберите главное изображение продукта</label>
+                    <input type="file" name="image" class="form-control" id="image" placeholder="У меня такой вопрос"
+                           required>
+                </div>
+                <div class="mb-3">
+                    <label for="category">Выберите категорию товара</label>
+                    <select name="category" class="form-select" id="category" required>
+                        <option value="Furniture">Furniture</option>
+                        <option value="Electronics">Electronics</option>
+                        <option value="Appliances">Appliances</option>
+                    </select>
+                </div>
+                <div class="mb-3">
+                    <label for="price">Укажите цену $</label>
+                    <input type="number" name="price" class="form-control" id="price" placeholder="Укажите цену"
+                           required>
+                </div>
+                <button type="submit" class="btn btn-lg btn-block btn-outline-primary">Создать товар</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+{% if product_created %}
+<div class="alert alert-success alert-dismissible fade show" role="alert">
+    Ваш товар успешно создан!
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    <a href="/" class="btn btn-success">Перейти на главную страницу</a>
+</div>
+{% endif %}
+{% endblock %}
