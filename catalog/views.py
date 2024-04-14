@@ -2,38 +2,50 @@ from django.shortcuts import render  # type: ignore
 from django.core.files.storage import default_storage  # type: ignore
 from django.core.paginator import Paginator  # type: ignore
 from catalog.models import Product, Contact
+from django.views.generic import ListView, DetailView, CreateView, TemplateView
+from django.urls import reverse_lazy
 
 
-def home_page(request):
-    products = Product.objects.order_by('id')
-    paginator = Paginator(products, 12)
-    page_number = request.GET.get('page')
-    page_obj = paginator.get_page(page_number)
-    context = {
-        'products': page_obj
-    }
+class HomePageView(ListView):
+    model = Product
+    template_name = 'catalog/home.html'
+    context_object_name = 'products'
+    paginate_by = 12
+    ordering = ['id']
 
-    return render(request, 'catalog/home.html', context)
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        paginator = context['paginator']
+        page_numbers_range = 5  # кол-во страниц, отображаемых в "page navigation"
+        page = self.request.GET.get('page')
+        current_page = int(page) if page else 1
+        start_index = int((current_page - 1) / page_numbers_range) * page_numbers_range
+        end_index = start_index + page_numbers_range
+        if end_index >= paginator.num_pages:
+            end_index = paginator.num_pages
+
+        page_range = list(paginator.page_range)[start_index:end_index]
+
+        context['page_range'] = page_range
+        return context
 
 
-def contacts_page(request):
-    if request.method == 'POST':
+class ContactsPageView(TemplateView):
+    template_name = 'catalog/contacts.html'
+
+    def post(self, request, *args, **kwargs):
         name = request.POST.get('name')
         phone = request.POST.get('phone')
         message = request.POST.get('message')
         print(f'{name} {phone} {message}')
         Contact.objects.create(name=name, phone=phone, message=message)
+        return self.render_to_response(self.get_context_data())
 
-    return render(request, 'catalog/contacts.html')
 
-
-def product_detail(request, product_id):
-    product = Product.objects.get(pk=product_id)
-    context = {
-        'product': product
-    }
-    return render(request, 'catalog/product_detail.html', context)
-
+class ProductDetailView(DetailView):
+    model = Product
+    template_name = 'catalog/product_detail.html'
+    context_object_name = 'product'
 
 # доп. задание
 def create_product(request):

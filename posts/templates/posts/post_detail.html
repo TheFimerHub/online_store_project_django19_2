@@ -1,0 +1,31 @@
+{% extends 'catalog/base.html' %}
+{% load mediapath_tag %}
+{% load static %}
+
+
+{% block css %}
+<link href="{% static 'css/products-detail.css'%}" rel="stylesheet">
+{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="product-details">
+        <div class="row">
+            <div class="col-md-6">
+                <div class="product-image-container">
+                    <span class="product-category">{{ post.creation_date }}</span>
+                    <img src="{% mediapath post.get_image_url %}" class="product-image">
+                </div>
+            </div>
+            <div class="col-md-6">
+                <h1 class="product-title">{{ post.title }}</h1>
+                <p class="product-description">{{ post.content }}</p>
+                <a href="/post/update/{{ post.slug }}" class="btn btn-lg btn-block btn-warning w-40">Edit</a>
+                <a href="/post/delete/{{ post.slug }}" class="btn btn-lg btn-block btn-danger w-40">Delete</a>
+                <span style="display: block; text-align: right;"
+                      class="post-views">views: {{ post.views }}</span>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

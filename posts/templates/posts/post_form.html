@@ -1,0 +1,48 @@
+{% extends 'catalog/base.html' %}
+{% load mediapath_tag %}
+{% load static %}
+
+{% block content %}
+<div class="col-lg-6 mx-auto">
+    <div class="card mb-4 box-shadow">
+        <div class="card-header">
+            {% if post %}
+            <h4 class="my-0 font-weight-normal">Изменить свой пост</h4>
+            {% else %}
+            <h4 class="my-0 font-weight-normal">Создать свой пост</h4>
+            {% endif %}
+        </div>
+        <div class="card-body">
+            <form method="post" action="" class="form-floating" enctype="multipart/form-data">
+                {% csrf_token %}
+                <div class="mb-3">
+                    <label for="title">Заголовок</label>
+                    <input type="text" name="title" class="form-control" id="title" {% if post %}value="{{ post.title }}"{% endif %} required>
+                </div>
+                <div class="mb-3">
+                    <label for="content">Содержание</label>
+                    <textarea name="content" class="form-control" id="content" required>{% if post %}{{ post.content }}{% endif %}</textarea>
+                </div>
+                <div class="mb-3">
+                    <input type="file" name="preview" class="form-control" id="preview" required>
+                </div>
+                <button type="submit" class="btn btn-lg btn-block btn-outline-primary">
+                    {% if post %}
+                    Сохранить пост
+                    {% else %}
+                    Создать пост
+                    {% endif %}
+                </button>
+            </form>
+        </div>
+    </div>
+</div>
+
+{% if post_created %}
+<div class="alert alert-success alert-dismissible fade show" role="alert">
+    Ваш пост успешно {% if post %}изменён{% else %}создан{% endif %}!
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    <a href="/post/" class="btn btn-success">Перейти на страницу блога</a>
+</div>
+{% endif %}
+{% endblock %}
