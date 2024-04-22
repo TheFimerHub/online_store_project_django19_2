@@ -23,6 +23,16 @@ class Product(models.Model):
         verbose_name = 'Product'
         verbose_name_plural = 'Products'
 
+class Version(models.Model):
+    product = models.ForeignKey(Product, on_delete=models.CASCADE)
+    version_number = models.FloatField(default=1)
+    version_name = models.CharField(max_length=50)
+    is_active = models.BooleanField(default=False)
+
+    class Meta:
+        verbose_name = 'Version'
+        verbose_name_plural = 'Versions'
+
 
 class Category(models.Model):
     name = models.CharField(max_length=50, verbose_name='name')
@@ -46,3 +56,5 @@ class Contact(models.Model):
     class Meta:
         verbose_name = 'Contact'
         verbose_name_plural = 'Contacts'
+
+

@@ -1,9 +1,13 @@
-from django.shortcuts import render  # type: ignore
+from django.shortcuts import render, get_object_or_404  # type: ignore
 from django.core.files.storage import default_storage  # type: ignore
 from django.core.paginator import Paginator  # type: ignore
-from catalog.models import Product, Contact
-from django.views.generic import ListView, DetailView, CreateView, TemplateView
-from django.urls import reverse_lazy
+from catalog.forms import ProductForm
+from catalog.models import Product, Contact, Version
+from django.views.generic import ListView, DetailView, CreateView, TemplateView, UpdateView, DeleteView
+from django.urls import reverse_lazy, reverse
+from django.views.generic import ListView
+from .models import Product, Version
+from django.db.models import Q
 
 
 class HomePageView(ListView):
@@ -13,20 +17,43 @@ class HomePageView(ListView):
     paginate_by = 12
     ordering = ['id']
 
+    def get_queryset(self):
+        # Фильтруем продукты: либо есть активная версия, либо нет версии
+        return Product.objects.filter(Q(version__is_active=True) | Q(version__isnull=True)).order_by('last_modified_date').distinct()
+
     def get_context_data(self, **kwargs):
+        # Добавление активных версий продуктов в контекст
         context = super().get_context_data(**kwargs)
-        paginator = context['paginator']
-        page_numbers_range = 5  # кол-во страниц, отображаемых в "page navigation"
+        products = self.get_queryset()  # Получаем список продуктов
+        active_versions = {}  # Словарь для хранения активных версий
+
+        # Проходимся по каждому продукту и его связанным версиям
+        for product in products:
+            active_versions[product.id] = []  # Создаем список для каждого продукта
+            versions = product.version_set.filter(is_active=True)  # Фильтруем активные версии
+
+            for version in versions:
+                active_versions[product.id].append({
+                    'version_name': version.version_name,
+                    'version_number': version.version_number,
+                })
+
+        context['active_versions'] = active_versions  # Добавляем активные версии в контекст
+
+        # Получаем страницу из GET-параметров запроса
         page = self.request.GET.get('page')
         current_page = int(page) if page else 1
+
+        # Определение диапазона страниц для пагинации
+        page_numbers_range = 5  # кол-во страниц, отображаемых в "page navigation"
         start_index = int((current_page - 1) / page_numbers_range) * page_numbers_range
         end_index = start_index + page_numbers_range
+        paginator = context['paginator']
         if end_index >= paginator.num_pages:
             end_index = paginator.num_pages
-
         page_range = list(paginator.page_range)[start_index:end_index]
-
         context['page_range'] = page_range
+
         return context
 
 
@@ -47,27 +74,48 @@ class ProductDetailView(DetailView):
     template_name = 'catalog/product_detail.html'
     context_object_name = 'product'
 
-# доп. задание
-def create_product(request):
-    context = {'product_created': False}
-    if request.method == 'POST':
-        name = request.POST.get('name')
-        description = request.POST.get('description')
-        image_file = request.FILES.get('image')
-        category = request.POST.get('category')
-        price_per_unit = request.POST.get('price')
 
-        if image_file:
-            file_name = image_file.name
-            default_storage.save('products/' + file_name, image_file)
-            image_preview = file_name
-        else:
-            image_preview = None
+class ProductCreateView(CreateView):
+    model = Product
+    form_class = ProductForm
+    template_name = 'catalog/create_product.html'
+    success_url = reverse_lazy('catalog:home_page')
 
-        try:
-            Product.objects.create(name=name, description=description, image_preview=image_preview, category=category,
-                                   price_per_unit=price_per_unit)
-            context = {'product_created': True}
-        except Exception:
-            context = {'product_created': False}
-    return render(request, 'catalog/create_product.html', context)
+    def form_valid(self, form):
+        image_preview = form.cleaned_data['image_preview']
+        if image_preview:
+            file_name = image_preview.name
+            default_storage.save('products/' + file_name, image_preview)
+            form.instance.image_preview = file_name
+
+        return super().form_valid(form)
+
+
+class ProductUpdateView(UpdateView):
+    model = Product
+    form_class = ProductForm
+    template_name = 'catalog/create_product.html'
+    success_url = reverse_lazy('catalog:home_page')
+
+    def form_valid(self, form):
+        # Получаем предыдущий объект продукта
+        previous_product = self.get_object()
+
+        # Удаляем предыдущее изображение, если оно было изменено
+        new_image_preview = form.cleaned_data['image_preview']
+        if new_image_preview:
+            if previous_product.image_preview:
+                default_storage.delete(previous_product.image_preview.path)
+
+            # Сохраняем новое изображение
+            file_name = new_image_preview.name
+            default_storage.save('products/' + file_name, new_image_preview)
+            form.instance.image_preview = 'products/' + file_name
+
+        return super().form_valid(form)
+
+
+class ProductDeleteView(DeleteView):
+    model = Product
+    context_object_name = 'product'
+    success_url = reverse_lazy('catalog:home_page')

@@ -22,7 +22,9 @@
                 <p class="product-description">{{ product.description }}</p>
                 <p class="product-price"><span class="product-discount">${{ product.price_per_unit }}</span> <span
                         class="product-old-price">$9999</span></p>
-                <button class="btn btn-lg btn-block btn-primary w-50">Купить</button>
+                <button class="btn btn-lg btn-block btn-primary w-40">Buy</button>
+                <a href="/update/{{ product.pk }}" class="btn btn-lg btn-block btn-warning w-40">Edit</a>
+                <a href="/delete/{{ product.pk }}" class="btn btn-lg btn-block btn-danger w-40">Delete</a>
             </div>
         </div>
     </div>

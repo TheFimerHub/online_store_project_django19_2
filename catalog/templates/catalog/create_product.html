@@ -3,52 +3,57 @@
 {% load static %}
 
 {% block content %}
-<div class="col-lg-6 mx-auto">
-    <div class="card mb-4 box-shadow">
-        <div class="card-header">
-            <h4 class="my-0 font-weight-normal">Создайте собственный товар</h4>
-        </div>
-        <div class="card-body">
-            <form method="post" action="" class="form-floating" enctype="multipart/form-data">
+<form method="post" enctype="multipart/form-data">
+    <div class="col-lg-6 mx-auto">
+        <div class="card mb-4 box-shadow">
+            <div class="card-header">
+                <h4 class="my-0 font-weight-normal">Создайте собственный товар</h4>
+            </div>
+            <div class="card-body">
                 {% csrf_token %}
-                <div class="mb-3">
-                    <label for="name">Название продукта</label>
-                    <input type="text" name="name" class="form-control" id="name" placeholder="Ваш продукт..." required>
-                </div>
-                <div class="mb-3">
-                    <label for="description">Опишите ваш продукт</label>
-                    <input type="text" name="description" class="form-control" id="description"
-                           placeholder="Этот продукт нужен для..." required>
-                </div>
-                <div class="mb-3">
-                    <label for="image">Выберите главное изображение продукта</label>
-                    <input type="file" name="image" class="form-control" id="image" placeholder="У меня такой вопрос"
-                           required>
-                </div>
-                <div class="mb-3">
-                    <label for="category">Выберите категорию товара</label>
-                    <select name="category" class="form-select" id="category" required>
-                        <option value="Furniture">Furniture</option>
-                        <option value="Electronics">Electronics</option>
-                        <option value="Appliances">Appliances</option>
-                    </select>
-                </div>
-                <div class="mb-3">
-                    <label for="price">Укажите цену $</label>
-                    <input type="number" name="price" class="form-control" id="price" placeholder="Укажите цену"
-                           required>
-                </div>
-                <button type="submit" class="btn btn-lg btn-block btn-outline-primary">Создать товар</button>
-            </form>
+                <p>
+                    <label for="id_name">Название товара:</label>
+                    <input type="text" name="name" maxlength="50" class="form-control"
+                           required="" id="id_name" {% if product %} value="{{ product.name }}" {% endif %}>
+                </p>
+                <p>
+                    <label for="id_description">Описание товара:</label>
+                    <textarea name="description" cols="40" rows="10" maxlength="500" class="form-control"
+                              required=""
+                              id="id_description">{% if product %}{{ product.description }}{% endif %}</textarea>
+                </p>
+                <p>
+                    <label for="id_image_preview">Фото товара:</label>
+                    {% if product %}
+                    </br>
+                    На данный момент:
+                    <a href="/media/products/{{ product.image_preview }}">{{ product.image_preview }}</a>
+                    </br>
+                    Изменить:
+                    <input type="file" name="image_preview" accept="image/*" class="form-control"
+                           id="id_image_preview">
+                    {% else %}
+                    <input type="file" name="image_preview" accept="image/*" class="form-control"
+                           id="id_image_preview">
+                    {% endif %}
+                </p>
+                <p>
+                    <label for="id_category">Введите категорию:</label>
+                    <input type="text" name="category" maxlength="50" class="form-control" required=""
+                           id="id_category" {% if product %} value="{{ product.category }}" {% endif %}>
+                </p>
+                <p>
+                    <label for="id_price_per_unit">Введите цену в $:</label>
+                    <input type="number" name="price_per_unit" min="0" class="form-control" required=""
+                           id="id_price_per_unit" {% if product %} value="{{ product.price_per_unit }}" {% endif %}>
+                </p>
+                {% if product %}
+                <button type="submit" class="btn btn-lg btn-block btn-outline-primary">Обновить</button>
+                {% else %}
+                <button type="submit" class="btn btn-lg btn-block btn-outline-primary">Сохранить</button>
+                {% endif %}
+            </div>
         </div>
     </div>
-</div>
-
-{% if product_created %}
-<div class="alert alert-success alert-dismissible fade show" role="alert">
-    Ваш товар успешно создан!
-    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-    <a href="/" class="btn btn-success">Перейти на главную страницу</a>
-</div>
-{% endif %}
+</form>
 {% endblock %}
