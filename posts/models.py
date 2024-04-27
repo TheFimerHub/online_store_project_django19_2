@@ -1,6 +1,8 @@
 from django.db import models
 
-NULLABLE = {'null' : True, 'blank' : True}
+from catalog.models import NULLABLE
+
+
 class Post(models.Model):
     title = models.CharField(max_length=250, verbose_name='title')
     slug = models.CharField()

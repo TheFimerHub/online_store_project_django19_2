@@ -1,0 +1,27 @@
+{% extends 'catalog/base.html' %}
+{% load mediapath_tag %}
+{% load static %}
+
+{% block content %}
+<div class="col-lg-6 mx-auto">
+    <div class="card mb-4 box-shadow">
+        <div class="card-header">
+            {% if post %}
+            <h4 class="my-0 font-weight-normal">Изменить свой пост</h4>
+            {% else %}
+            <h4 class="my-0 font-weight-normal">Создать свой пост</h4>
+            {% endif %}
+        </div>
+        <div class="card-body">
+            <form method="post" action="" class="form-floating" enctype="multipart/form-data">
+                {% csrf_token %}
+                {{ form.as_p }}
+                <button type="submit" class="btn btn-lg btn-block btn-outline-primary">
+                    Войти
+                </button>
+            </form>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

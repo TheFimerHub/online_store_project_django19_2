@@ -5,7 +5,7 @@ NULLABLE = {'null' : True, 'blank' : True}
 class Product(models.Model):
     name = models.CharField(max_length=50, verbose_name='name')
     description = models.TextField(max_length=500, verbose_name='description')
-    image_preview = models.ImageField(upload_to='products/', verbose_name='image', **NULLABLE)
+    image_preview = models.ImageField(verbose_name='image', **NULLABLE)
     category = models.CharField(max_length=50, verbose_name='сategory')
     price_per_unit = models.PositiveIntegerField(verbose_name='price')
     creation_date = models.DateField(auto_now_add=True, verbose_name='creation date')
@@ -15,6 +15,7 @@ class Product(models.Model):
         return str(self.name)
 
     def get_image_url(self):
+        print(self.image_preview)
         if self.image_preview:
             return f"products/{self.image_preview}"
         return ''

@@ -8,6 +8,9 @@ from django.urls import reverse_lazy, reverse
 from django.views.generic import ListView
 from .models import Product, Version
 from django.db.models import Q
+from os.path import join
+from os.path import basename
+
 
 
 class HomePageView(ListView):
@@ -84,9 +87,10 @@ class ProductCreateView(CreateView):
     def form_valid(self, form):
         image_preview = form.cleaned_data['image_preview']
         if image_preview:
-            file_name = image_preview.name
-            default_storage.save('products/' + file_name, image_preview)
-            form.instance.image_preview = file_name
+            file_name = basename(image_preview.name)
+            save_path = join('products', file_name)
+            default_storage.save(save_path, image_preview)
+            form.instance.image_preview = save_path
 
         return super().form_valid(form)
 
@@ -108,9 +112,10 @@ class ProductUpdateView(UpdateView):
                 default_storage.delete(previous_product.image_preview.path)
 
             # Сохраняем новое изображение
-            file_name = new_image_preview.name
-            default_storage.save('products/' + file_name, new_image_preview)
-            form.instance.image_preview = 'products/' + file_name
+                file_name = new_image_preview.name
+                save_path = 'products/' + file_name
+                default_storage.save(save_path, new_image_preview)
+                form.instance.image_preview = 'products/' + file_name
 
         return super().form_valid(form)
 
