@@ -2,15 +2,14 @@ from django.shortcuts import render, get_object_or_404  # type: ignore
 from django.core.files.storage import default_storage  # type: ignore
 from django.core.paginator import Paginator  # type: ignore
 from catalog.forms import ProductForm
-from catalog.models import Product, Contact, Version
-from django.views.generic import ListView, DetailView, CreateView, TemplateView, UpdateView, DeleteView
-from django.urls import reverse_lazy, reverse
+from catalog.models import Product, Contact
+from django.views.generic import DetailView, CreateView, TemplateView, UpdateView, DeleteView
+from django.urls import reverse_lazy
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic import ListView
-from .models import Product, Version
 from django.db.models import Q
 from os.path import join
 from os.path import basename
-
 
 
 class HomePageView(ListView):
@@ -22,7 +21,8 @@ class HomePageView(ListView):
 
     def get_queryset(self):
         # Фильтруем продукты: либо есть активная версия, либо нет версии
-        return Product.objects.filter(Q(version__is_active=True) | Q(version__isnull=True)).order_by('last_modified_date').distinct()
+        return Product.objects.filter(Q(version__is_active=True) | Q(version__isnull=True)).order_by(
+            'last_modified_date').distinct()
 
     def get_context_data(self, **kwargs):
         # Добавление активных версий продуктов в контекст
@@ -72,55 +72,65 @@ class ContactsPageView(TemplateView):
         return self.render_to_response(self.get_context_data())
 
 
-class ProductDetailView(DetailView):
+class ProductDetailView(LoginRequiredMixin, DetailView):
     model = Product
     template_name = 'catalog/product_detail.html'
     context_object_name = 'product'
+    login_url = "/users/"
 
 
-class ProductCreateView(CreateView):
+class ProductCreateView(LoginRequiredMixin, CreateView):
     model = Product
     form_class = ProductForm
     template_name = 'catalog/create_product.html'
+    login_url = "/users/"
     success_url = reverse_lazy('catalog:home_page')
 
     def form_valid(self, form):
+        form.instance.user_owner = self.request.user
         image_preview = form.cleaned_data['image_preview']
         if image_preview:
             file_name = basename(image_preview.name)
             save_path = join('products', file_name)
             default_storage.save(save_path, image_preview)
-            form.instance.image_preview = save_path
+            form.instance.image_preview = file_name
+            print(save_path, form.instance.image_preview)
 
         return super().form_valid(form)
 
 
-class ProductUpdateView(UpdateView):
+class ProductUpdateView(LoginRequiredMixin, UpdateView):
     model = Product
     form_class = ProductForm
     template_name = 'catalog/create_product.html'
+    login_url = "/users/"
     success_url = reverse_lazy('catalog:home_page')
 
     def form_valid(self, form):
-        # Получаем предыдущий объект продукта
+        # Получаем предыдущий объект продукта (если это обновление)
         previous_product = self.get_object()
 
-        # Удаляем предыдущее изображение, если оно было изменено
+        # Получаем новое изображение из формы
         new_image_preview = form.cleaned_data['image_preview']
-        if new_image_preview:
-            if previous_product.image_preview:
-                default_storage.delete(previous_product.image_preview.path)
 
-            # Сохраняем новое изображение
-                file_name = new_image_preview.name
-                save_path = 'products/' + file_name
-                default_storage.save(save_path, new_image_preview)
-                form.instance.image_preview = 'products/' + file_name
+        # Проверяем, было ли изображение изменено
+        if previous_product and previous_product.image_preview != new_image_preview:
+            # Сохраняем новое изображение в подпапке products
+            file_name = new_image_preview.name
+            save_path = 'products/' + file_name
+            default_storage.save(save_path, new_image_preview)
+            form.instance.image_preview = file_name
+
+            # Удаляем предыдущее изображение, если оно было изменено
+            if previous_product.image_preview:
+                if default_storage.exists(previous_product.image_preview.path):
+                    default_storage.delete(previous_product.image_preview.path)
 
         return super().form_valid(form)
 
 
-class ProductDeleteView(DeleteView):
+class ProductDeleteView(LoginRequiredMixin, DeleteView):
     model = Product
     context_object_name = 'product'
+    login_url = "/users/"
     success_url = reverse_lazy('catalog:home_page')

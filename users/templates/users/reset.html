@@ -6,16 +6,15 @@
 <div class="col-lg-6 mx-auto">
     <div class="card mb-4 box-shadow">
         <div class="card-header">
-            <h4 class="my-0 font-weight-normal">Вход в аккаунт</h4>
+            <h4 class="my-0 font-weight-normal">Восстановление пароля</h4>
         </div>
         <div class="card-body">
             <form method="post" action="" class="form-floating" enctype="multipart/form-data">
                 {% csrf_token %}
                 {{ form.as_p }}
                 <button type="submit" class="btn btn-lg btn-block btn-outline-primary">
-                    Войти
+                    Отправить пароль на почту
                 </button>
-                <a style="display: block; text-align: right;" href="{% url 'users:reset_password' %}">Забыли пароль?</a>
             </form>
         </div>
     </div>

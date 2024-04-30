@@ -16,11 +16,11 @@
             <form method="post" action="" class="form-floating" enctype="multipart/form-data">
                 {% csrf_token %}
                 <div class="mb-3">
-                    <label for="title">Заголовок</label>
+                    <label for="title">Заголовок:</label>
                     <input type="text" name="title" class="form-control" id="title" {% if post %}value="{{ post.title }}"{% endif %} required>
                 </div>
                 <div class="mb-3">
-                    <label for="content">Содержание</label>
+                    <label for="content">Содержание:</label>
                     <textarea name="content" class="form-control" id="content" required>{% if post %}{{ post.content }}{% endif %}</textarea>
                 </div>
                 <div class="mb-3">
