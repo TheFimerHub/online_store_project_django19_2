@@ -1,8 +1,8 @@
 from django.shortcuts import render, get_object_or_404  # type: ignore
 from django.core.files.storage import default_storage  # type: ignore
 from django.core.paginator import Paginator  # type: ignore
-from catalog.forms import ProductForm
-from catalog.models import Product, Contact
+from catalog.forms import ProductForm, ProductModeratorForm, VersionForm, VersionModeratorForm
+from catalog.models import Product, Contact, Version
 from django.views.generic import DetailView, CreateView, TemplateView, UpdateView, DeleteView
 from django.urls import reverse_lazy
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -10,6 +10,7 @@ from django.views.generic import ListView
 from django.db.models import Q
 from os.path import join
 from os.path import basename
+from django.core.exceptions import PermissionDenied
 
 
 class HomePageView(ListView):
@@ -21,8 +22,9 @@ class HomePageView(ListView):
 
     def get_queryset(self):
         # Фильтруем продукты: либо есть активная версия, либо нет версии
-        return Product.objects.filter(Q(version__is_active=True) | Q(version__isnull=True)).order_by(
-            'last_modified_date').distinct()
+        return Product.objects.filter(
+            Q(versions__is_active=True) | Q(versions__isnull=True)
+        ).order_by('last_modified_date').distinct()
 
     def get_context_data(self, **kwargs):
         # Добавление активных версий продуктов в контекст
@@ -33,7 +35,7 @@ class HomePageView(ListView):
         # Проходимся по каждому продукту и его связанным версиям
         for product in products:
             active_versions[product.id] = []  # Создаем список для каждого продукта
-            versions = product.version_set.filter(is_active=True)  # Фильтруем активные версии
+            versions = product.versions.filter(is_active=True)  # Фильтруем активные версии
 
             for version in versions:
                 active_versions[product.id].append({
@@ -78,6 +80,13 @@ class ProductDetailView(LoginRequiredMixin, DetailView):
     context_object_name = 'product'
     login_url = "/users/"
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        product = self.get_object()
+        active_version = product.versions.filter(is_active=True).first()
+        context['active_version'] = active_version
+        return context
+
 
 class ProductCreateView(LoginRequiredMixin, CreateView):
     model = Product
@@ -106,27 +115,40 @@ class ProductUpdateView(LoginRequiredMixin, UpdateView):
     login_url = "/users/"
     success_url = reverse_lazy('catalog:home_page')
 
+
     def form_valid(self, form):
         # Получаем предыдущий объект продукта (если это обновление)
         previous_product = self.get_object()
 
-        # Получаем новое изображение из формы
-        new_image_preview = form.cleaned_data['image_preview']
+        # Проверяем, существует ли поле 'image_preview' в форме
+        if 'image_preview' in form.cleaned_data:
+            # Получаем новое изображение из формы
+            new_image_preview = form.cleaned_data['image_preview']
 
-        # Проверяем, было ли изображение изменено
-        if previous_product and previous_product.image_preview != new_image_preview:
-            # Сохраняем новое изображение в подпапке products
-            file_name = new_image_preview.name
-            save_path = 'products/' + file_name
-            default_storage.save(save_path, new_image_preview)
-            form.instance.image_preview = file_name
+            # Проверяем, было ли изображение изменено
+            if previous_product and previous_product.image_preview != new_image_preview:
+                # Сохраняем новое изображение в подпапке products
+                file_name = new_image_preview.name
+                save_path = 'products/' + file_name
+                default_storage.save(save_path, new_image_preview)
+                form.instance.image_preview = file_name
 
-            # Удаляем предыдущее изображение, если оно было изменено
-            if previous_product.image_preview:
-                if default_storage.exists(previous_product.image_preview.path):
-                    default_storage.delete(previous_product.image_preview.path)
+                # Удаляем предыдущее изображение, если оно было изменено
+                if previous_product.image_preview:
+                    if default_storage.exists(previous_product.image_preview.path):
+                        default_storage.delete(previous_product.image_preview.path)
 
         return super().form_valid(form)
+
+    def get_form_class(self):
+        user = self.request.user
+
+        if user == self.object.user_owner:
+            return ProductForm
+
+        if user.has_perm("catalog.can_change_description") and user.has_perm("catalog.can_change_category"):
+            return ProductModeratorForm
+        raise PermissionDenied
 
 
 class ProductDeleteView(LoginRequiredMixin, DeleteView):
@@ -134,3 +156,25 @@ class ProductDeleteView(LoginRequiredMixin, DeleteView):
     context_object_name = 'product'
     login_url = "/users/"
     success_url = reverse_lazy('catalog:home_page')
+
+class VersionUpdateView(LoginRequiredMixin, UpdateView):
+    model = Version
+    form_class = VersionForm
+    template_name = 'catalog/create_version.html'
+    login_url = "/users/"
+    success_url = reverse_lazy('catalog:home_page')
+
+    def get_object(self, queryset=None):
+        uuid = self.kwargs.get('uuid')
+        return get_object_or_404(Version, uuid=uuid)
+
+    def get_form_class(self):
+        user = self.request.user
+        version = self.get_object()
+
+        if user == version.product.user_owner:
+            return VersionForm
+
+        if user.has_perm("catalog.can_cancel_publication"):
+            return VersionModeratorForm
+        raise PermissionDenied

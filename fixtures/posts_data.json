@@ -1,0 +1,119 @@
+[
+  {
+    "model": "posts.post",
+    "pk": 12,
+    "fields": {
+      "title": "Unveiling the Spring Collection: Embrace the Season with Stepanoff Shop!",
+      "slug": "spring",
+      "content": "As the days grow longer and the flowers begin to bloom, it's time to refresh your wardrobe with our latest Spring Collection! Dive into a world of vibrant colors, playful patterns, and breezy fabrics designed to elevate your style for the season. From flowy dresses to chic separates, we have everything you need to step out in style. Explore the essence of spring fashion with Stepanoff Shop today!",
+      "preview": "Снимок экрана 2024-04-09 в 22.02.02.png",
+      "creation_date": "2024-04-09",
+      "publication_sign": true,
+      "views": 2
+    }
+  },
+  {
+    "model": "posts.post",
+    "pk": 13,
+    "fields": {
+      "title": "Travel in Style: Must-Have Accessories for Your Next Adventure!",
+      "slug": "travel",
+      "content": "Embark on your next journey with confidence and flair with our curated selection of travel accessories at Stepanoff Shop. From sleek passport holders to versatile travel bags, we've got you covered for wherever your wanderlust takes you. Explore our collection and add a touch of elegance to your travel ensemble. Adventure awaits!",
+      "preview": "0d75cbb30c3839a6d832f7e791f40b0e.jpg",
+      "creation_date": "2024-04-09",
+      "publication_sign": true,
+      "views": 4
+    }
+  },
+  {
+    "model": "posts.post",
+    "pk": 14,
+    "fields": {
+      "title": "Transform Your Living Space: Introducing Stepanoff Shop's Home Decor Collection!",
+      "slug": "living_space",
+      "content": "Elevate your home with Stepanoff Shop's exquisite home decor collection! From statement furniture pieces to decorative accents that add personality to any room, we have everything you need to turn your house into a stylish sanctuary. Dive into our curated selection and discover the perfect pieces to reflect your unique style and elevate your living space to new heights of sophistication.",
+      "preview": "Снимок экрана 2024-04-09 в 23.02.49.png",
+      "creation_date": "2024-04-09",
+      "publication_sign": true,
+      "views": 11
+    }
+  },
+  {
+    "model": "posts.post",
+    "pk": 15,
+    "fields": {
+      "title": "Tech Essentials: Stay Connected and Stylish with Stepanoff Shop's Gadgets",
+      "slug": "gadgets",
+      "content": "Upgrade your tech game with the latest gadgets from Stepanoff Shop! From sleek wireless earbuds to stylish phone cases, we've got the accessories you need to stay connected in style. Explore our collection and discover innovative tech solutions that seamlessly blend fashion and functionality. Whether you're working, gaming, or just staying entertained, do it with flair with Stepanoff Shop's tech essentials!",
+      "preview": "8878899a152ea413ad56e633ca0eb5a7.jpg",
+      "creation_date": "2024-04-09",
+      "publication_sign": true,
+      "views": 8
+    }
+  },
+  {
+    "model": "posts.post",
+    "pk": 16,
+    "fields": {
+      "title": "Pet Parent Paradise: Pamper Your Furry Friends with Stepanoff Shop's Pet Accessories",
+      "slug": "pet",
+      "content": "Treat your beloved pets to the best with Stepanoff Shop's adorable pet accessories! From cozy beds to stylish collars and toys that'll keep them entertained for hours, we have everything you need to spoil your furry companions rotten. Show them how much you care with high-quality products designed with both comfort and style in mind. Let the pampering begin!",
+      "preview": "ed1959a8f993630b4bdee2e38710a74c.jpg",
+      "creation_date": "2024-04-10",
+      "publication_sign": true,
+      "views": 11
+    }
+  },
+  {
+    "model": "posts.post",
+    "pk": 17,
+    "fields": {
+      "title": "Culinary Creations: Cook in Style with Stepanoff Shop's Kitchen Essentials",
+      "slug": "culinary",
+      "content": "Turn your kitchen into a culinary haven with Stepanoff Shop's premium kitchen essentials! From stylish cookware sets to innovative gadgets and utensils, we have everything you need to unleash your inner chef and create delicious masterpieces with flair. Elevate your cooking experience and impress your guests with the perfect blend of style and functionality from Stepanoff Shop.",
+      "preview": "Снимок экрана 2024-04-10 в 17.06.34.png",
+      "creation_date": "2024-04-10",
+      "publication_sign": true,
+      "views": 12
+    }
+  },
+  {
+    "model": "posts.post",
+    "pk": 18,
+    "fields": {
+      "title": "Wanderlust Wonders: Explore the World with Stepanoff Shop's Travel Gear",
+      "slug": "travel_gear",
+      "content": "Embark on your next adventure fully equipped with Stepanoff Shop's top-notch travel gear! From durable luggage sets to compact travel organizers and accessories, we have everything you need to make your journey smooth, stylish, and unforgettable. Whether you're jet-setting across the globe or hitting the road for a weekend getaway, trust Stepanoff Shop to be your ultimate travel companion.",
+      "preview": "Снимок экрана 2024-04-10 в 17.07.36.png",
+      "creation_date": "2024-04-10",
+      "publication_sign": true,
+      "views": 5
+    }
+  },
+  {
+    "model": "posts.post",
+    "pk": 20,
+    "fields": {
+      "title": "Bookworm's Delight: Dive into a World of Knowledge with Stepanoff Shop's Book Collection",
+      "slug": "books",
+      "content": "Feed your mind and indulge your love for literature with Stepanoff Shop's extensive book collection! From bestselling novels to timeless classics and insightful non-fiction, we have something for every bookworm's taste. Immerse yourself in captivating stories, expand your horizons, and let your imagination soar with Stepanoff Shop's literary treasures.",
+      "preview": "723fefee2bfbbd8d09ee9b5178641509.jpg",
+      "creation_date": "2024-04-10",
+      "publication_sign": true,
+      "views": 7
+    }
+  },
+  {
+    "model": "posts.post",
+    "pk": 25,
+    "fields": {
+      "title": "Music Maestro: Find Your Rhythm with Stepanoff Shop's Musical Instruments",
+      "slug": "music-maestro-find-your-rhythm-with-stepanoff-shops-musical-instruments",
+      "content": "Channel your inner musician and make beautiful melodies with Stepanoff Shop's exceptional collection of musical instruments! From classic guitars to sleek keyboards and versatile percussion instruments, we have everything you need to explore your musical talents and express yourself through sound. Whether you're a seasoned pro or a budding enthusiast, let the music play with Stepanoff Shop.",
+      "preview": "Снимок экрана 2024-04-11 в 18.12.57.png",
+      "creation_date": "2024-04-11",
+      "publication_sign": true,
+      "views": 21
+    }
+  }
+]

@@ -23,7 +23,10 @@
                 <p class="product-price"><span class="product-discount">${{ product.price_per_unit }}</span> <span
                         class="product-old-price">$9999</span></p>
                 <button class="btn btn-lg btn-block btn-primary w-40">Buy</button>
+                {% if perms.catalog.can_change_description and perms.catalog.can_change_category or user == product.user_owner %}
                 <a href="/update/{{ product.pk }}" class="btn btn-lg btn-block btn-warning w-40">Edit</a>
+                {% endif %}
+                <a href="/version/{{ active_version.uuid }}" class="btn btn-lg btn-block btn-warning w-40">Edit version</a>
                 <a href="/delete/{{ product.pk }}" class="btn btn-lg btn-block btn-danger w-40">Delete</a>
             </div>
         </div>

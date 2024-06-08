@@ -11,47 +11,25 @@
             </div>
             <div class="card-body">
                 {% csrf_token %}
+                {% for field in form %}
                 <p>
-                    <label for="id_name">Название товара:</label>
-                    <input type="text" name="name" maxlength="50" class="form-control"
-                           required="" id="id_name" {% if product %} value="{{ product.name }}" {% endif %}>
-                </p>
-                <p>
-                    <label for="id_description">Описание товара:</label>
-                    <textarea name="description" cols="40" rows="10" maxlength="500" class="form-control"
-                              required=""
-                              id="id_description">{% if product %}{{ product.description }}{% endif %}</textarea>
-                </p>
-                <p>
-                    <label for="id_image_preview">Фото товара:</label>
-                    {% if product %}
-                    </br>
-                    На данный момент:
-                    <a href="/media/products/{{ product.image_preview }}">{{ product.image_preview }}</a>
-                    </br>
-                    Изменить:
-                    <input type="file" name="image_preview" accept="image/*" class="form-control"
-                           id="id_image_preview">
-                    {% else %}
-                    <input type="file" name="image_preview" accept="image/*" class="form-control"
-                           id="id_image_preview">
+                    <label for="{{ field.id_for_label }}">{{ field.label }}:</label>
+                    {{ field }}
+                    {% if field.help_text %}
+                    <small class="form-text text-muted">{{ field.help_text }}</small>
+                    {% endif %}
+                    {% if field.errors %}
+                    <div class="invalid-feedback">
+                        {% for error in field.errors %}
+                        <p>{{ error }}</p>
+                        {% endfor %}
+                    </div>
                     {% endif %}
                 </p>
-                <p>
-                    <label for="id_category">Введите категорию:</label>
-                    <input type="text" name="category" maxlength="50" class="form-control" required=""
-                           id="id_category" {% if product %} value="{{ product.category }}" {% endif %}>
-                </p>
-                <p>
-                    <label for="id_price_per_unit">Введите цену в $:</label>
-                    <input type="number" name="price_per_unit" min="0" class="form-control" required=""
-                           id="id_price_per_unit" {% if product %} value="{{ product.price_per_unit }}" {% endif %}>
-                </p>
-                {% if product %}
-                <button type="submit" class="btn btn-lg btn-block btn-outline-primary">Обновить</button>
-                {% else %}
-                <button type="submit" class="btn btn-lg btn-block btn-outline-primary">Сохранить</button>
-                {% endif %}
+                {% endfor %}
+                <button type="submit" class="btn btn-lg btn-block btn-outline-primary">
+                    {% if product %}Обновить{% else %}Сохранить{% endif %}
+                </button>
             </div>
         </div>
     </div>

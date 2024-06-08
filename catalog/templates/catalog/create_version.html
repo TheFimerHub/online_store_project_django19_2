@@ -1,0 +1,21 @@
+{% extends 'catalog/base.html' %}
+{% load static %}
+
+{% block content %}
+<form method="post" enctype="multipart/form-data">
+    <div class="col-lg-6 mx-auto">
+        <div class="card mb-4 box-shadow">
+            <div class="card-header">
+                <h4 class="my-0 font-weight-normal">Обновите версию</h4>
+            </div>
+            <div class="card-body">
+                {% csrf_token %}
+                {{ form.as_p }}
+                <button type="submit" class="btn btn-lg btn-block btn-outline-primary">
+                    Обновить
+                </button>
+            </div>
+        </div>
+    </div>
+</form>
+{% endblock %}

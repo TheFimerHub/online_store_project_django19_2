@@ -29,4 +29,5 @@ class VersionAdmin(admin.ModelAdmin):
                     'version_number',
                     'version_name',
                     'is_active',
+                    'uuid',
                     )

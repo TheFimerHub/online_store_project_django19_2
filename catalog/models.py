@@ -1,4 +1,5 @@
 from django.db import models
+import uuid
 
 from users.models import User
 
@@ -18,7 +19,6 @@ class Product(models.Model):
         return str(self.name)
 
     def get_image_url(self):
-        print(self.image_preview)
         if self.image_preview:
             return f"products/{self.image_preview}"
         return ''
@@ -27,15 +27,25 @@ class Product(models.Model):
         verbose_name = 'Product'
         verbose_name_plural = 'Products'
 
+        permissions = [
+            ("can_cancel_publication", "Can cancel publication"),
+            ("can_change_description", "Can change description"),
+        ]
+
 class Version(models.Model):
-    product = models.ForeignKey(Product, on_delete=models.CASCADE)
+    product = models.ForeignKey(Product, related_name='versions', on_delete=models.CASCADE)
     version_number = models.FloatField(default=1)
     version_name = models.CharField(max_length=50)
     is_active = models.BooleanField(default=False)
+    uuid = models.UUIDField(default=uuid.uuid4, unique=True, editable=False)
 
     class Meta:
         verbose_name = 'Version'
         verbose_name_plural = 'Versions'
+
+        permissions = [
+            ("can_cancel_publication", "Can cancel publication"),
+        ]
 
 
 class Category(models.Model):
